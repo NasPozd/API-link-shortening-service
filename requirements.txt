@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+pydantic
+redis
+celery
+passlib
+pytest
+httpx
+bcrypt==3.2.0
+pydantic-settings
+locust
+coverage
+PyJWT==1.7.1
+sphinx

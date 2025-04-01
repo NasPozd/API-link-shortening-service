@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Docker Compose Logs</title>
+    <style>
+        body { font-family: monospace; margin: 20px }
+        .success { color: #00aa00 }
+        .pull-log { background: #f0f0f0; padding: 10px; margin: 10px 0 }
+        .build-log { background: #fff8e1; padding: 10px; margin: 10px 0 }
+        .container-log { background: #e3f2fd; padding: 10px; margin: 10px 0 }
+        .test-results { background: #e8f5e9; padding: 10px; margin: 10px 0 }
+        .service-log { margin: 15px 0; border-left: 3px solid #ccc; padding-left: 10px }
+    </style>
+</head>
+<body>
+    <h1>Docker Compose Up Logs</h1>
+
+    <div class="docker-command">
+        <h2>Command:</h2>
+        <code>docker-compose up</code>
+    </div>
+
+    <div class="pull-log">
+        <h3>Image Pull:</h3>
+        <pre>[+] Running 9/9
+ ✔ redis Pulled                                                                                                                     8.6s 
+   ✔ 6e909acdb790 Pull complete                                                                                                     6.2s 
+   ✔ d9b98f603d6b Pull complete                                                                                                     6.2s 
+   ✔ 513666b05c81 Pull complete                                                                                                     6.3s 
+   ✔ 764e7fbfdb05 Pull complete                                                                                                     6.4s 
+   ✔ 2884ccae34c1 Pull complete                                                                                                     6.8s 
+   ✔ df4660a56a60 Pull complete                                                                                                     6.9s 
+   ✔ 4f4fb700ef54 Pull complete                                                                                                     6.9s 
+   ✔ b138a3179b82 Pull complete                                                                                                     6.9s</pre>
+    </div>
+
+    <div class="build-log">
+        <h3>Build Process:</h3>
+        <pre>[+] Building 2.2s (16/19)                                                                                           docker:desktop-linux
+            => [api internal] load build definition from Dockerfile                                                                            0.1s
+            => => transferring dockerfile: 239B                                                                                                0.0s 
+            => [test internal] load build definition from Dockerfile                                                                           0.1s 
+            => => transferring dockerfile: 239B                                                                                                0.0s 
+            => [api internal] load metadata for docker.io/library/python:3.9                                                                   1.2s 
+            => [test internal] load .dockerignore                                                                                              0.0s
+            => => transferring context: 2B                                                                                                     0.0s 
+            => [api internal] load .dockerignore                                                                                               0.0s 
+            => => transferring context: 2B                                                                                                     0.0s 
+            => [api internal] load build context                                                                                               0.1s 
+            => => transferring context: 45.16kB                                                                                                0.1s 
+            => [api 1/5] FROM docker.io/library/python:3.9@sha256:bc2e05bca883473050fc3b7c134c28ab822be73126ba1ce29517d9e8b7f3703b             0.0s 
+            => [test internal] load build context                                                                                              0.1s 
+            => => transferring context: 45.16kB                                                                                                0.1s
+            => CACHED [test 2/5] WORKDIR /app                                                                                                  0.0s 
+            => CACHED [test 3/5] COPY requirements.txt .                                                                                       0.0s 
+            => CACHED [api 4/5] RUN pip install --no-cache-dir -r requirements.txt                                                             0.0s 
+            => [test 5/5] COPY . .                                                                                                             0.4s 
+            => [test] exporting to image                                                                                                       0.1s 
+            => => exporting layers                                                                                                             0.1s 
+            => => writing image sha256:7e798c76fd9ec1cd0371997eaa87389315e521a6df69ef0e27115db15c40f9eb                                        0.0s 
+            => => naming to docker.io/library/api-link-shortening-service-test                                                                 0.0s 
+            => [api] exporting to image                                                                                                        0.1s 
+            => => exporting layers                                                                                                             0.1s 
+            => => writing image sha256:2c360c2c67dd2c3db3075f068c57d780232ba6986d7590559cf032a227100730                                        0.0s 
+            => => naming to docker.io/library/api-link-shortening-service-api                                                                  0.0s 
+            => [api] resolving provenance for metadata file                                                                                    0.0s 
+            => [test] resolving provenance for metadata file                                                                                   0.0s 
+           [+] Running 4/4</pre>
+    </div>
+
+    <div class="container-log">
+        <h3>Container Startup:</h3>
+        <pre>[+] Running 4/4
+ ✔ Network api-link-shortening-service_default    Created                                                                           0.1s 
+ ✔ Container api-link-shortening-service-redis-1  Created                                                                           0.2s 
+ ✔ Container api-link-shortening-service-test-1   Created                                                                           0.1s 
+ ✔ Container api-link-shortening-service-api-1    Created
+ Attaching to api-1, redis-1, test-1                                                                        0.1s</pre>
+    </div>
+
+    <div class="service-logs">
+        <h3>Service Outputs:</h3>
+        <div class="service-log redis">
+            <h4>Redis:</h4>
+            <pre>1:C 01 Apr 2025 12:06:23.620 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+                redis-1  | 1:C 01 Apr 2025 12:06:23.620 * Redis version=7.4.2, bits=64, commit=00000000, modified=0, pid=1, just started
+                redis-1  | 1:C 01 Apr 2025 12:06:23.620 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf                                                                                                     
+                redis-1  | 1:M 01 Apr 2025 12:06:23.620 * monotonic clock: POSIX clock_gettime
+                redis-1  | 1:M 01 Apr 2025 12:06:23.623 * Running mode=standalone, port=6379.                                                            
+                redis-1  | 1:M 01 Apr 2025 12:06:23.624 * Server initialized                                                                             
+                redis-1  | 1:M 01 Apr 2025 12:06:23.624 * Ready to accept connections tcp</pre>
+        </div>
+
+        <div class="service-log api">
+            <h4>API:</h4>
+            <pre>api-1    | INFO:app.db.database:Initializing the database...                                                                             
+                api-1    | WARNING:app.db.database:Tables already exist. Skipping creation.
+                api-1    | INFO:root:Application startup initiated.
+                api-1    | INFO:     Started server process [1]                                                                                          
+                api-1    | INFO:     Waiting for application startup.
+                api-1    | INFO:     Application startup complete.                                                                                       
+                api-1    | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)</pre>
+        </div>
+
+        <div class="service-log test">
+            <h4>Tests:</h4>
+            <pre>test-1   | ============================= test session starts ==============================                                              
+                test-1   | platform linux -- Python 3.9.21, pytest-8.3.5, pluggy-1.5.0
+                test-1   | rootdir: /app                                                                                                                 
+                test-1   | plugins: anyio-4.9.0
+                test-1   | collected 19 items                                                                                                            
+                test-1   |                                                                                                                               
+                test-1   | tests/api/test_auth_api.py .                                             [  5%]
+                test-1   | tests/api/test_links_api.py .                                            [ 10%]
+                test-1   | tests/api/test_links_functional.py .....                                 [ 36%]
+                test-1   | tests/api/test_stats_api.py .                                            [ 42%]
+                test-1   | tests/integration/test_auth_flow.py .                                    [ 47%]
+                test-1   | tests/integration/test_db_integration.py .                               [ 52%]
+                test-1   | tests/unit/test_link_generation.py ..                                    [ 63%]
+                test-1   | tests/unit/test_link_model.py .                                          [ 68%]
+                test-1   | tests/unit/test_schemas.py ..                                            [ 78%]
+                test-1   | tests/unit/test_shortener.py ..                                          [ 89%]
+                test-1   | tests/unit/test_user_model.py ..                                         [100%]
+                test-1   | 
+                test-1   | ============================= 19 passed in 10.37s ==============================</pre>
+        </div>
+    </div>
+
+    <div class="test-results success">
+        <h3>Test Results:</h3>
+        <p>All 19 tests passed successfully (exit code 0)</p>
+    </div>
+
+    <div class="exit-status">
+        <h3>Container Status:</h3>
+        <ul>
+            <li>test-1: Exited with code 0 (Success)</li>
+            <li>Other containers still running</li>
+        </ul>
+    </div>
+</body>
+</html>

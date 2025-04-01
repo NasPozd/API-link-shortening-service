@@ -1,0 +1,36 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - REDIS_HOST=redis 
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  test:
+    build: .
+    command: ["sh", "-c", "pytest tests/"]
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app
+      - REDIS_HOST=redis
+    networks:
+      - default
+    depends_on:
+      redis:
+        condition: service_healthy
