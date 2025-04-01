@@ -7,6 +7,7 @@
 - [Использование](#использование)
 - [Дерево проекта](#дерево-проекта)
 - [API Endpoints](#api-endpoints)
+- [Схема базы данных](#cхема-базы-данных)
 - [Обзор тестов](#обзор-тестов)
 - [Результаты тестов](#результаты-тестов)
 - [Лицензия](#лицензия)
@@ -201,6 +202,59 @@ API-link-shortening-service/
        "token_type": "bearer"
      }
      ```
+
+## Схема базы данных
+
+### Таблицы и их структура:
+
+#### Таблица `links`
+- **id**: Integer, primary key
+- **original_url**: String (до 2048 символов), не может быть пустым
+- **short_code**: String, уникальный
+- **created_at**: DateTime, по умолчанию текущее время UTC
+- **expires_at**: DateTime, может быть пустым
+- **clicks**: Integer, по умолчанию 0
+- **last_accessed**: DateTime, может быть пустым
+- **user_id**: Integer, внешний ключ, ссылающийся на `users.id`, может быть пустым
+
+#### Таблица `users`
+- **id**: Integer, primary key
+- **username**: String, уникальный, индексированный
+- **hashed_password**: String
+
+#### Таблица `projects`
+- **id**: Integer, primary key
+- **name**: String, не может быть пустым
+- **links**: Связь с моделью `Link`, позволяющая доступ к связанным ссылкам.
+
+| Таблица    | Поле             | Тип         | Ограничения                          |
+|------------|------------------|-------------|--------------------------------------|
+| **users**  | `id`             | Integer     | Primary Key                          |
+|            | `username`       | String      | Unique, Indexed                      |
+|            | `hashed_password`| String      |                                      |
+| **links**  | `id`             | Integer     | Primary Key                          |
+|            | `original_url`   | String(2048)| Not Null                             |
+|            | `short_code`     | String      | Unique                               |
+|            | `created_at`     | DateTime    | Default: текущее время              |
+|            | `expires_at`     | DateTime    | Nullable                             |
+|            | `clicks`         | Integer     | Default: 0                          |
+|            | `last_accessed`  | DateTime    | Nullable                             |
+|            | `user_id`        | Integer     | ForeignKey("users.id"), Nullable     |
+|            | `project_id`     | Integer     | ForeignKey("projects.id"), Nullable  |
+| **projects**| `id`            | Integer     | Primary Key                          |
+|            | `name`           | String      | Not Null                             |
+
+#### Связи:
+- **users → links**  
+  Один пользователь может иметь множество ссылок (`user_id` в `links`).
+- **projects → links**  
+  Один проект может содержать множество ссылок (`project_id` в `links`).
+
+#### Индексы:
+- `username` (users) — уникальный.
+- `short_code` (links) — уникальный.
+
+![](https://raw.githubusercontent.com/NasPozd/API-link-shortening-service/refs/heads/main/docs/db_schema.png)
 
 ## Обзор тестов
 В этом проекте представлен комплексный набор тестов для обеспечения функциональности и надежности сервиса сокращения ссылок API. Ниже приведено подробное описание тестов, реализованных в проекте.
